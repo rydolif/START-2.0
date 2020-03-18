@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+	<meta charset="utf-8">
+	<title>Главная</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+	<link rel="icon" href="img/favicon.ico">
+	<meta property="og:image" content="img/screenshot.png">
+	<link rel="stylesheet" href="css/main.min.css?v=1">
+</head>
+
+<body>
+
+<!-- 	<div class="preloader">
+		<div class="pulse"></div>
+	</div> -->
+
+	<header class="header">
+		<div class="header__container container">
+
+			<a href="/" class="header__logo header__logo">
+				<img src="img/logo.svg" alt="logo">
+			</a>
+
+			<button class="hamburger" type="button">
+				<span class="hamburger__box">
+					<span class="hamburger__item"></span>
+				</span>
+			</button>
+
+			<nav class="nav">
+				<ul>
+					<li><a href="index.html">Головна</a></li>
+					<li><a href="catalog.html">Наші послуги</a></li>
+					<li><a href="about.html">Виконанні роботи</a></li>
+					<li><a href="contacts.html">Контакти</a></li>
+				</ul>
+			</nav>
+
+		</div>
+	</header>
+
+	<main class="main">
+
+		<section class="">
+			<div class="container">
+				<h1>Start</h1>
+				<img class="b-lazy" 
+					src="data:image/gif;base64,R0lGODlhAQACAIAAAP///wAAACH5BAEAAAEALAAAAAABAAIAAAICTAoAOw==" 
+					data-src="img/@2x/burger__main.png" 
+					data-src-small="img/@1x/burger__main.png"
+					alt="Описание изображения" />
+			</div>
+		</section>
+
+	</main>
+
+	<footer class="footer">
+		<div class="footer__container container"></div>
+	</footer>
+
+	<div class="modal" id="order">
+		<form action="sendmail.php" class="form" method="post">
+
+			<button class="close order_close" type="button">
+				<span></span>
+				<span></span>
+			</button>
+
+			<h3>Оставьте заявку, <br>мы свяжемся с Вами</h3>
+			<input type="hidden" name="subject" value="Узнать подробнее!">
+
+			<div class="">
+				<input type="text" name="name" placeholder="Имя" required>
+			</div>
+			<div class="">
+				<input type="tel" name="phone" placeholder="Телефон" required>
+			</div>
+			<div class="">
+				<button type="submit" class="btn" name="submit">Отправить</button>
+			</div>
+		</form>
+	</div>
+
+	<div class="modal" id="thanks">
+		<button class="close thanks_close" type="button">
+			<span></span>
+			<span></span>
+		</button>
+		<h3>Спасибо за доверие!</h3>
+		<p>Мы обязательно с вами свяжемся!</p>
+	</div>
+
+	<script src="js/scripts.min.js"></script>
+
+</body>
+</html>
