@@ -1,14 +1,14 @@
 $(function() {
 
+//-------------------------------попандер---------------------------------------
+  $('.modal').popup({transition: 'all 0.3s'});
+
 //------------------------------гамбургер-----------------------------
   // $('.hamburger').click(function() {
   //   $(this).toggleClass('hamburger--active');
   //   $('nav').toggleClass('nav--active');
   //   $('header').toggleClass('header--menu');
   // });
-
-//-------------------------------попандер---------------------------------------
-  $('.modal').popup({transition: 'all 0.3s'});
 
 //------------------------------------form-------------------------------------------
   // $('input[type="tel"]').mask('+0 (000) 000-00-00');
@@ -73,32 +73,32 @@ $(function() {
   // });
 
 //----------------------------------------fixed----------------------------------
-  $(window).scroll(function(){
-      if($(this).scrollTop()>20){
-          $('.header').addClass('header--active');
-      }
-      else if ($(this).scrollTop()<20){
-          $('.header').removeClass('header--active');
-      }
-  });
+  // $(window).scroll(function(){
+  //     if($(this).scrollTop()>20){
+  //         $('.header').addClass('header--active');
+  //     }
+  //     else if ($(this).scrollTop()<20){
+  //         $('.header').removeClass('header--active');
+  //     }
+  // });
 
-  if($(this).scrollTop()>20){
-    $('.header').addClass('header--active');
-  }
+  // if($(this).scrollTop()>20){
+  //   $('.header').addClass('header--active');
+  // }
 
 //-------------------------скорость якоря---------------------------------------
-  $(".header__list").on("click","a", function (event) {
-      event.preventDefault();
-      var id  = $(this).attr('href'),
-          top = $(id).offset().top;
-      $('body,html').animate({scrollTop: top - 60}, 'slow', 'swing');
-  //--------------------закриття меню при кліку на ссилку якоря--------------------
-     // $('.hamburger').removeClass('hamburger--active');
-     // $('.header-menu').removeClass('header-menu');
-     // $('.header--active').removeClass('header--active');
-     // $('.nav--active').removeClass('nav--active');
+  // $(".header__list").on("click","a", function (event) {
+  //     event.preventDefault();
+  //     var id  = $(this).attr('href'),
+  //         top = $(id).offset().top;
+  //     $('body,html').animate({scrollTop: top - 60}, 'slow', 'swing');
+  // //--------------------закриття меню при кліку на ссилку якоря--------------------
+  //    // $('.hamburger').removeClass('hamburger--active');
+  //    // $('.header-menu').removeClass('header-menu');
+  //    // $('.header--active').removeClass('header--active');
+  //    // $('.nav--active').removeClass('nav--active');
 
-  });
+  // });
 
   // //-------------------------------анімація цифр---------------------------------------
   //   var show = true;
@@ -127,20 +127,3 @@ $(function() {
   // $(window).on('load', function(){
   //   $('.preloader').delay(1000).fadeOut('slow');
   // });
-
- 	var bLazy = new Blazy({
-    breakpoints: [{
-	  width: 578 // Max-width
-    , src: 'data-src-small'
-	}]
-      , success: function(element){
-	    setTimeout(function(){
-		// We want to remove the loader gif now.
-		// First we find the parent container
-		// then we remove the "loading" class which holds the loader image
-		var parent = element.parentNode;
-		parent.className = parent.className.replace(/\bloading\b/,'');
-	    }, 200);
-        }
-   });
-	
