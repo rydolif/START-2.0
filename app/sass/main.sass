@@ -1,9 +1,7 @@
-@import "libs"
-@import "base"
+@import base
 
-img
-	max-width: 100%
-	width: 100%
+// CUSTOM USER STYLES & IMPORTS
+
 
 .container
 	width: 100%
@@ -16,6 +14,12 @@ img
 
 	+r(992)
 		max-width: 768px
+
+	+r(767)
+		max-width: 576px
+
+	+r(576)
+		max-width: 480px
 
 
 .header
@@ -52,4 +56,3 @@ img
 	&__container
 
 
-@import "page"
