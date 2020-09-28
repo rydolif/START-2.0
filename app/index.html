@@ -18,9 +18,19 @@
 	<header class="header">
 		<div class="header__container container">
 
-			<a href="/" class="header__logo header__logo">
-				<img src="img/logo.svg" alt="logo">
+			<a href="/" class="header__logo">
+				<img src="img/dest/header__logo.png" alt="logo">
 			</a>
+
+			<nav class="header__nav">
+				<ul>
+					<li><a href="#about">О компании</a></li>
+					<li><a href="#services">Услуги</a></li>
+					<li><a href="#step">Этапы</a></li>
+					<li><a href="#advantages">Преимущества</a></li>
+				</ul>
+				<a href="#" class="header__nav_btn header__btn order__open">Написать нам</a>
+			</nav>
 
 			<button class="hamburger" type="button">
 				<span class="hamburger__box">
@@ -28,56 +38,43 @@
 				</span>
 			</button>
 
-			<nav class="nav">
-				<ul>
-					<li><a href="index.html">Головна</a></li>
-					<li><a href="catalog.html">Наші послуги</a></li>
-					<li><a href="about.html">Виконанні роботи</a></li>
-					<li><a href="contacts.html">Контакти</a></li>
-				</ul>
-			</nav>
-
 		</div>
 	</header>
 
-	<main class="main">
-
-		<section class="">
-			<div class="container">
-				<h1>Start</h1>
-			</div>
-		</section>
-
-	</main>
+	<section class="">
+		<div class="container">
+			<h1>Start</h1>
+		</div>
+	</section>
 
 	<footer class="footer">
 		<div class="footer__container container"></div>
 	</footer>
 
-	<div class="modal" id="order">
-		<form action="sendmail.php" class="form" method="post">
+	<div class="modal modal--services">
+		<form action="sendmail.php" class="modal__form form" method="post">
 
-			<button class="close order_close" type="button">
+			<button class="close modal__close" type="button">
 				<span></span>
 				<span></span>
 			</button>
 
-			<h3>Оставьте заявку, <br>мы свяжемся с Вами</h3>
-			<input type="hidden" name="subject" value="Узнать подробнее!">
+			<h2 class="modal__title">Оставьте заявку на <br>услугу</h2>
+			<input type="hidden" name="subject" value="Оставьте заявку на услугу">
 
-			<div class="">
-				<input type="text" name="name" placeholder="Имя" required>
+			<div class="modal__line">
+				<input type="text" name="name" placeholder="Имя" class="modal__input" required>
 			</div>
-			<div class="">
-				<input type="tel" name="phone" placeholder="Телефон" required>
+			<div class="modal__line">
+				<input type="tel" name="phone" placeholder="Телефон" class="modal__input" required>
 			</div>
-			<div class="">
-				<button type="submit" class="btn" name="submit">Отправить</button>
+			<div class="modal__line">
+				<button type="submit" class="modal__btn" name="submit">Отправить</button>
 			</div>
 		</form>
 	</div>
 
-	<div class="modal" id="thanks">
+	<div class="modal modal--thanks">
 		<button class="close thanks_close" type="button">
 			<span></span>
 			<span></span>

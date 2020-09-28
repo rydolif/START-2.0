@@ -1,8 +1,6 @@
 @import base
 
-// CUSTOM USER STYLES & IMPORTS
-
-
+// -----CONTAINER-----
 .container
 	width: 100%
 	max-width: 1200px
@@ -21,6 +19,93 @@
 	+r(576)
 		max-width: 480px
 
+// -----BUTTON-----
+.btn
+	position: relative
+	display: flex
+	justify-content: center
+	align-items: center
+	height: 45px
+	font-size: 18px
+	color: $accent
+	font-weight: 700
+	border-radius: 20px
+	max-width: fit-content
+
+	&:hover,
+	&:focus
+		border: 1px solid $accent
+		background: $accent
+		color: #fff
+
+// -----HAMBURGER-----
+.hamburger
+	display: none
+	position: absolute
+	right: 15px
+	top: 55%
+	padding: 0
+	transform: translate(0, -50%)
+	border: none
+	background-color: transparent
+	transition: all .3s
+
+	&:focus,
+	&:hover
+		outline: none
+		opacity: .7
+
+	&__box
+		position: relative
+		display: inline-block
+		width: 35px
+		perspective: 80px
+
+	&__item
+		position: absolute
+		right: 0
+		top: 0
+		width: 35px
+		height: 3px
+		background-color: #fff
+		border-radius: 4px
+		transition: all .2s
+		bottom: 0
+
+		&::before
+			content: ""
+			display: block
+			position: absolute
+			right: 0
+			top: -10px
+			background-color: #fff
+			width: 35px
+			height: 3px
+			transition: transform 0s 0.1s
+
+		&::after
+			content: ""
+			display: block
+			position: absolute
+			right: 0
+			top: -20px
+			background-color: #fff
+			width: 35px
+			height: 3px
+			transition: transform 0s 0.1s
+
+
+	&--active
+		z-index: 1001
+
+		.hamburger__item
+			background-color: transparent
+			transform: rotateY(180deg)
+			&::before
+				transform: translate3d(0, 0px, 0) rotate(45deg)
+			&::after
+				transform: translate3d(0, 10px, 0) rotate(-45deg)
+
 
 .header
 	position: fixed
@@ -32,27 +117,71 @@
 		+between
 
 	&__logo
+		width: 100px
+
 		img
-			width: 130px
+			width: 100%
 			height: auto
-
-
-.nav
-	ul
-		+between
-
-	li
-		margin-right: 25px
-
-		&:last-child
-			margin-right: 0
-
-
-.main
-	+cover
 
 
 .footer
 	&__container
+		+between
 
 
+// -----MODAL-----
+.modal
+	position: relative
+	max-width: 725px
+	width: 100%
+	height: auto
+	padding: 60px 75px 145px
+	margin: 20px 0
+	background-color: #fff
+	z-index: 1
+	box-shadow: 0 0 16px rgba(0, 0, 0, 0.29)
+	border-radius: 20px
+	border: 2px solid #273a72
+	display: none
+
+	h3
+		justify-content: flex-start
+		margin-bottom: 50px
+
+	&__close
+		position: absolute
+		right: 15px
+		top: 15px
+		display: block
+		width: 40px
+		height: 40px
+		border-radius: 50%
+		border: none
+		cursor: pointer
+		transition: all .6s
+		background-color: #fff
+
+		&:hover,
+		&:focus
+			outline: none
+			transform: rotate(90deg)
+
+			span
+				background: red
+
+		span
+			display: block
+			position: absolute
+			left: 50%
+			top: 50%
+			background: #273a72
+			transition: all .6s
+			border-radius: 4px
+			height: 22px
+			width: 3px
+
+			&:first-child
+				transform: translate(-50%, -50%) rotate(45deg)
+
+			&:last-child
+				transform: translate(-50%, -50%) rotate(-45deg)
