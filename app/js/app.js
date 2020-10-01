@@ -3,17 +3,17 @@
 document.addEventListener("DOMContentLoaded", function() {
 
 	//----------------------SLIDER-hero----------------------
-		var mySwiper = new Swiper('.hero__slider', {
-			loop: true,
-			pagination: {
-				el: '.hero__pagination',
-				clickable: 'true',
-			},
-			navigation: {
-				nextEl: '.hero__next',
-				prevEl: '.hero__prev',
-			},
-		});
+		// var mySwiper = new Swiper('.hero__slider', {
+		// 	loop: true,
+		// 	pagination: {
+		// 		el: '.hero__pagination',
+		// 		clickable: 'true',
+		// 	},
+		// 	navigation: {
+		// 		nextEl: '.hero__next',
+		// 		prevEl: '.hero__prev',
+		// 	},
+		// });
 
 	//----------------------MODAL-----------------------
 		const modals = (triggerSelector, modalSelector, closeSelector) => {
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			});
 	
 		};
-		modals('.order__open', '.modal--order', '.modal--order .modal__close');
+		// modals('.order__open', '.modal--order', '.modal--order .modal__close');
 
 	//----------------------SCROLL-----------------------
 		const scrollTo = (scrollTo) => {
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				});
 			});
 		};
-		scrollTo('.header__nav');
+		// scrollTo('.header__nav');
 	
 	//----------------------FIXED-HEADER-----------------------
 		const headerFixed = (headerFixed, headerActive) => {
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			});
 	
 		};
-		headerFixed('.header', '.header--active');
+		// headerFixed('.header', '.header--active');
 	
 	//----------------------HAMBURGER-----------------------
 		const hamburger = (hamburgerButton, hamburgerNav, hamburgerHeader) => {
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			});
 	
 		};
-		hamburger('.hamburger', '.header__nav', '.header');
+		// hamburger('.hamburger', '.header__nav', '.header');
 	
 	
 	});
