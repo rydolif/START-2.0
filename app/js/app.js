@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			},
 		});
 
-	
 	//----------------------MODAL-----------------------
 		const modals = (triggerSelector, modalSelector, closeSelector) => {
 			const trigger = document.querySelectorAll(triggerSelector),
