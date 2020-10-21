@@ -1,55 +1,77 @@
 <?php
-	$SITE_TITLE = 'MIRMIKA';
-	$SITE_DESCR = '';
 
-	if ( isset($_POST) ) {
-		$name = htmlspecialchars(trim($_POST['name']));
-		$mail = htmlspecialchars(trim($_POST['mail']));
-		$phone = htmlspecialchars(trim($_POST['phone']));
-		$textarea = htmlspecialchars(trim($_POST['textarea']));
-		$subject = isset($_POST['subject']) ? htmlspecialchars(trim($_POST['subject'])) : '';
+	use PHPMailer\PHPMailer\PHPMailer;
+	use PHPMailer\PHPMailer\Exception;
 
-		// $to = 'Mariya.serguta@yandex.ru';
-		// $to = 'rudolifrudolif@gmail.com';
-		$to = 'mirmika.dv@gmail.com';
+	require 'phpmailer/src/Exception.php';
+	require 'phpmailer/src/PHPMailer.php';
 
-		$headers = "From: $SITE_TITLE \r\n";
-		$headers .= "Reply-To: ". $email . "\r\n";
-		$headers .= 'MIME-Version: 1.0' . "\r\n";
-		$headers .= "Content-Type: text/html; charset=utf-8\r\n";
+	$mail = new PHPMailer(true);
+	$mail -> CharSet = 'UTF-8';
+	$mail -> setLanguage('ru', 'phpmailer/language/');
+	$mail -> IsHTML(true);
 
-		$data = '<h1>'.$subject."</h1>";
-		if ($name != '') {
-			$data .= 'Имя: '.$name."<br>";
-		}
-		if ($mail != '') {
-			$data .= 'Почта: '.$mail."<br>";
-		}
-		if ($phone != '') {
-			$data .= 'Телефон: '.$phone."<br>";
-		}
-		if ($textarea != '') {
-			$data .= 'Вопрос: '.$textarea."<br>";
-		}
+	//От каго письмо
+	$mail ->setFrom('rudolifrudolif@gmail.com', 'Стартовый макет');
+	//Кому отправить
+	$mail ->addAddress('rudolifrudolif@gmail.com');
+	//Тема письма
+	$mail ->setFrom('Привет это тест отправки формы');
 
-
-		$message = "<div style='background:#ccc;border-radius:10px;padding:20px;'>
-				".$data."
-				<br>\n
-				<hr>\n
-				<br>\n
-				<small>это сообщение было отправлено с сайта ".$SITE_TITLE." - ".$SITE_DESCR.", отвечать на него не надо</small>\n</div>";
-		$send = mail($to, $subject, $message, $headers);
-
-		if ( $send ) {
-			echo '';
-		} else {
-				echo '<div class="error">Ошибка отправки формы</div>';
-		}
-
+	//Рука
+	$hand = 'Правая';
+	if($_POST['hand'] == 'left') {
+		$hand = 'Левая';
 	}
-	else {
-			echo '<div class="error">Ошибка, данные формы не переданы.</div>';
+
+	//Тело письма
+	$body = '<h1>Заголовок письма</h1>';
+
+	if(trim(!empty($_POST['name']))) {
+		$body.='<p><strong>Имя: </strong>' . $_POST['name']. '</p>';
 	}
-	die();
+	if(trim(!empty($_POST['email']))) {
+		$body.='<p><strong>Почта: </strong>' . $_POST['email']. '</p>';
+	}
+	if(trim(!empty($_POST['phone']))) {
+		$body.='<p><strong>Телефон: </strong>' . $_POST['phone']. '</p>';
+	}
+	if(trim(!empty($_POST['hand']))) {
+		$body.='<p><strong>Рука: </strong>' . $_POST['hand']. '</p>';
+	}
+	if(trim(!empty($_POST['ege']))) {
+		$body.='<p><strong>Возраст: </strong>' . $_POST['ege']. '</p>';
+	}
+	if(trim(!empty($_POST['message']))) {
+		$body.='<p><strong>Сообщение: </strong>' . $_POST['message']. '</p>';
+	}
+
+	//Прикрепить файл
+	if (!empty($_FILES['image']['tmp_name'])) {
+		//путь загрузки файла
+		$filePath = __DIR__ . '/file/' . $_FILES['image']['name'];
+
+		//загрузим файл
+		if (copy($_FILES['image']['tmp_name'], $filePath)) {
+			$fileAttach = $filePath;
+			$body.='<p><strong>Фото в приложении</strong></p>';
+			$mail -> addAttachment($fileAttach);
+		}
+	}
+
+	$mail->Body = $body;
+
+	//Отправляем
+	if (!$mail->send()) {
+		$message = 'Ошибка';
+	} else {
+		$massage = 'Данные отправлены!';
+	}
+
+	$response = ['message' => $massage];
+
+	header('Content-typt: application/json');
+	echo json_encode($response);
+
+
 ?>

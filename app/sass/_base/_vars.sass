@@ -62,13 +62,11 @@ button,
 
 
 input, textarea, select
-	width: 100%
-	border: 1px solid #ebebeb
+	+transition
 	outline: none
 	box-shadow: none
+	border: 1px solid #000
 	// -webkit-appearance: none
-	font-size: 16px
-	box-shadow: 0 0 6px rgba(42, 63, 125, 0.34)
 	
 	&:focus:required:invalid
 		border-color: red
@@ -83,22 +81,8 @@ input, textarea, select
 		-webkit-appearance: none
 
 	&::placeholder
-		color: #c4c4c4
-		font-size: 12px
-		line-height: 50px
+		color: $text
 
-input, select
-	height: 50px
-	line-height: 50px
-	padding: 0 25px
-
-	&::placeholder
-		line-height: 50px
-		font-size: 16px
-
-textarea
-	&::placeholder
-		line-height: 1.4
 
 label.error
 	position: absolute
