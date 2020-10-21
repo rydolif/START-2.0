@@ -7,16 +7,16 @@
 	require 'phpmailer/src/PHPMailer.php';
 
 	$mail = new PHPMailer(true);
-	$mail -> CharSet = 'UTF-8';
-	$mail -> setLanguage('ru', 'phpmailer/language/');
-	$mail -> IsHTML(true);
+	$mail->CharSet = 'UTF-8';
+	$mail->setLanguage('ru', 'phpmailer/language/');
+	$mail->IsHTML(true);
 
 	//От каго письмо
-	$mail ->setFrom('rudolifrudolif@gmail.com', 'Стартовый макет');
+	$mail->setFrom('info@fls.guru', 'Стартовый макет');
 	//Кому отправить
-	$mail ->addAddress('rudolifrudolif@gmail.com');
+	$mail->addAddress('rudolifrudolif@gmail.com');
 	//Тема письма
-	$mail ->setFrom('Привет это тест отправки формы');
+	$mail->Subject = ('Привет это тест отправки формы');
 
 	//Рука
 	$hand = 'Правая';
@@ -49,13 +49,13 @@
 	//Прикрепить файл
 	if (!empty($_FILES['image']['tmp_name'])) {
 		//путь загрузки файла
-		$filePath = __DIR__ . '/file/' . $_FILES['image']['name'];
+		$filePath = __DIR__ . '/files/' . $_FILES['image']['name'];
 
 		//загрузим файл
 		if (copy($_FILES['image']['tmp_name'], $filePath)) {
 			$fileAttach = $filePath;
 			$body.='<p><strong>Фото в приложении</strong></p>';
-			$mail -> addAttachment($fileAttach);
+			$mail->addAttachment($fileAttach);
 		}
 	}
 
@@ -70,7 +70,7 @@
 
 	$response = ['message' => $massage];
 
-	header('Content-typt: application/json');
+	header('Content-type: application/json');
 	echo json_encode($response);
 
 

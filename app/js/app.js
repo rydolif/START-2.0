@@ -13,23 +13,23 @@ document.addEventListener("DOMContentLoaded", function() {
 		let formData = new FormData(form);
 		formData.append('image', formImage.files[0]);
 
-
 		if (error === 0) {
 			form.classList.add('_sending');
+			let response = await fetch('sendmail.php', {
+				method: 'POST',
+				body: formData
+			});
 
-			// let response = await fetch('sendmail.php', {
-			// 	method: 'POST',
-			// 	body: formData
-			// });
-
-			// if (response.ok) {
-			// 	let result = await response.json();
-			// 	alert(result.message);
-			// 	formPreview.innerHTML = '';
-			// 	form.reset();
-			// } else {
-			// 	alert('Ошибка при отправке');
-			// }
+			if (response.ok) {
+				let result = await response.json();
+				alert(result.message);
+				formPreview.innerHTML = '';
+				form.reset();
+				form.classList.remove('_sending');
+			} else {
+				alert('Ошибка при отправке');
+				form.classList.remove('_sending');
+			}
 
 		} else {
 			alert('Заполниет поле'); // доделать
@@ -61,8 +61,8 @@ document.addEventListener("DOMContentLoaded", function() {
 					error++;
 				}
 			}
-			return error;
 		}
+		return error;
 	}
 
 	//картинка в форме
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		reader.onerror = function (e) {
 			alert('Ошибка');
 		};
-		reader.readAsDataURL(files);
+		reader.readAsDataURL(file);
 	}
 
 	function formAddError(input) {

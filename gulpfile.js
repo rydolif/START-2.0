@@ -66,7 +66,7 @@ function browsersync() {
 function scripts() {
 	return src(paths.scripts.src)
 	.pipe(concat(paths.jsOutputName))
-	.pipe(uglify())
+	// .pipe(uglify())
 	.pipe(dest(paths.scripts.dest))
 	.pipe(browserSync.stream())
 }
