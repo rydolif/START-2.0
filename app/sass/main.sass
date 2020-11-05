@@ -108,10 +108,10 @@
 
 
 .header
-	// position: fixed
-	// top: 0
-	// right: 0
-	// left: 0
+	position: fixed
+	top: 0
+	right: 0
+	left: 0
 
 	&__container
 		+between
@@ -126,6 +126,7 @@
 
 .section
 	padding: 40px 0
+
 
 .footer
 	&__container
@@ -209,6 +210,9 @@
 		border: 1px solid #8d8d8e
 		margin: auto
 
+		&::after
+			border-radius: 20px
+
 		+r(992)
 			max-width: 90vw
 			padding: 40px
@@ -218,6 +222,25 @@
 
 	&__line
 		margin-bottom: 20px
+
+	&__thanks
+		position: relative
+		display: flex
+		flex-direction: column
+		justify-content: center
+		align-items: center
+		flex-wrap: wrap
+		min-height: 200px
+		max-width: 480px
+
+		h3
+			text-transform: uppercase
+			font-size: 20px
+			margin-bottom: 20px
+		
+		p
+			font-size: 16px
+
 
 .form
 	position: relative
@@ -341,6 +364,7 @@
 			background-color: $dark
 			color: #fff
 			padding: 0 15px
+			cursor: pointer
 
 		&_preview
 			display: inline-block
@@ -421,4 +445,9 @@
 				background-color: $accent
 				top: 3px
 				box-shadow: 0 0 5px 0 rgba($dark, .2)
+
+
+
+
+
 

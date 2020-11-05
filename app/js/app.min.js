@@ -4,27 +4,27 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	//----------------------SLIDER-hero----------------------
 		// var mySwiper = new Swiper('.hero__slider', {
-		// slidesPerView: 1,
-		// spaceBetween: 30,
-		// loop: true,
-		// effect: 'fade',
-		// autoplay: {
-		// 	delay: 5000,
-		// },
-		// pagination: {
-		// 	el: '.hero__pagination',
-		// 	clickable: 'true',
+		// 	slidesPerView: 1,
+		// 	spaceBetween: 30,
+		// 	loop: true,
+		// 	effect: 'fade',
+		// 	autoplay: {
+		// 		delay: 5000,
 		// 	},
-		// navigation: {
-		// 	nextEl: '.hero__next',
-		// 	prevEl: '.hero__prev',
-		// },
-		// breakpoints: {
-		// 	320: {
-		// 		slidesPerView: 2,
-		// 		spaceBetween: 20
+		// 	pagination: {
+		// 		el: '.hero__pagination',
+		// 		clickable: 'true',
+		// 		},
+		// 	navigation: {
+		// 		nextEl: '.hero__next',
+		// 		prevEl: '.hero__prev',
 		// 	},
-		// }
+		// 	breakpoints: {
+		// 		320: {
+		// 			slidesPerView: 2,
+		// 			spaceBetween: 20
+		// 		},
+		// 	}
 		// });
 
 	//----------------------SCROLL-----------------------
@@ -140,52 +140,57 @@ document.addEventListener("DOMContentLoaded", function() {
 		const forms = (formsSelector) => {
 			const form = document.querySelectorAll(formsSelector);
 			let i = 1;
+			let img = 1;
+			let lebel = 1;
+			let prev = 1;
 
 			form.forEach(item => {
-				let elem = 'form--' + i++;
+				const elem = 'form--' + i++;
 				item.classList.add(elem);
 
-				// console.log(form);
+				let formId = item.id = (elem);
+				let formParent = document.querySelector('#' + formId);
 
-				item.addEventListener('submit', formSend);
-					
+				formParent.addEventListener('submit', formSend);
+
 				async function formSend(e) {
 					e.preventDefault();
 			
 					let error = formValidate(item);
 			
 					let formData = new FormData(item);
-					formData.append('image', formImage.files[0]);
-			
+					formData.append('image', formImageAdd.files[0]);
+
 					if (error === 0) {
-						form.classList.add('_sending');
+						item.classList.add('_sending');
 						let response = await fetch('sendmail.php', {
 							method: 'POST',
 							body: formData
 						});
 			
 						if (response.ok) {
-							let result = await response.json();
-							alert(result.message);
+							formParent.parentNode.style.display = 'none';
+							let modalThanks = document.querySelector('#modal--thanks');
+							
+							modalThanks.style.display = 'flex';
+							document.body.classList.add('modal--open');
 							formPreview.innerHTML = '';
-							form.reset();
-							form.classList.remove('_sending');
+							item.reset();
+							item.classList.remove('_sending');
 						} else {
 							alert('Ошибка при отправке');
-							form.classList.remove('_sending');
+							item.classList.remove('_sending');
 						}
 			
 					} else {
-						alert('Заполниет поле'); // доделать
+						alert('Заполниет поля'); // доделать
 					}
 				}
 			
 				function formValidate(item) {
 					let error = 0;
-					let formReq = document.querySelectorAll('._req');
-			
-					console.log(formReq);
-			
+					let formReq = formParent.querySelectorAll('._req');
+
 					for (let index = 0; index < formReq.length; index++) {
 						const input = formReq[index];
 						formRemoveError(input);
@@ -209,11 +214,21 @@ document.addEventListener("DOMContentLoaded", function() {
 				}
 			
 				//картинка в форме
-				const formImage = document.getElementById('formImage');
-				const formPreview = document.getElementById('formPreview');
-			
+				const formImage = formParent.querySelector('.formImage');
+				const formLebel = formParent.querySelector('.formLebel');
+				const formPreview = formParent.querySelector('.formPreview');
+
+				
+				let formImageNumber = 'formImage--' + img++;
+				let formPreviewNumber = 'formPreview--' + prev++;
+				
+				formImage.id = (formImageNumber);
+				formLebel.htmlFor = ('formImage--' + lebel++);
+				formPreview.id = (formPreviewNumber);
+				const formImageAdd = document.querySelector('#' + formImageNumber);
+
 				// изменения в инпуте файл
-				formImage.addEventListener('change', () =>  {
+				formImageAdd.addEventListener('change', () =>  {
 					uploadFile(formImage.files[0]);
 				});
 			
@@ -253,6 +268,10 @@ document.addEventListener("DOMContentLoaded", function() {
 				function emailTest(input) {
 					return !/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/. test(input.value);
 				}
+			
+				// function phoneTest(input) {
+				// 	return !/\+[0-9]{1}\s\([0-9]{3}\)\s[0-9]{3}-[0-9]{2}-[0-9]{2}/. test(input.value);
+				// }
 			});
 		};
 		forms('.form');

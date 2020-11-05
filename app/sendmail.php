@@ -13,7 +13,7 @@
 	$mail->IsHTML(true);
 
 	//От каго письмо
-	$mail->setFrom('info@fls.guru', 'Стартовый макет');
+	$mail->setFrom('rudolifrudolif@gmail.com', 'Стартовый макет');
 	//Кому отправить
 	$mail->addAddress('rudolifrudolif@gmail.com');
 	//Тема письма
