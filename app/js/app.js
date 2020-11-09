@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		// 	pagination: {
 		// 		el: '.hero__pagination',
 		// 		clickable: 'true',
-		// 		},
+		// 	},
 		// 	navigation: {
 		// 		nextEl: '.hero__next',
 		// 		prevEl: '.hero__prev',
@@ -169,9 +169,9 @@ document.addEventListener("DOMContentLoaded", function() {
 						});
 			
 						if (response.ok) {
-							formParent.parentNode.style.display = 'none';
 							let modalThanks = document.querySelector('#modal--thanks');
-							
+							formParent.parentNode.style.display = 'none';
+
 							modalThanks.style.display = 'flex';
 							document.body.classList.add('modal--open');
 							formPreview.innerHTML = '';
@@ -182,8 +182,6 @@ document.addEventListener("DOMContentLoaded", function() {
 							item.classList.remove('_sending');
 						}
 			
-					} else {
-						alert('Заполниет поля'); // доделать
 					}
 				}
 			
@@ -193,15 +191,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
 					for (let index = 0; index < formReq.length; index++) {
 						const input = formReq[index];
-						formRemoveError(input);
+						// formRemoveError(input);
 			
 						if (input.classList.contains('_email')) {
 							if(emailTest(input)) {
-								formAddError(input);
+								formAddErrorEmail(input);
 								error++;
 							}
 						} else if (input.getAttribute('type') === 'checkbox' && input.checked === false) {
-							formAddError(input);
+							formAddErrorCheck(input);
 							error++;
 						} else {
 							if (input.value === '') {
@@ -218,7 +216,6 @@ document.addEventListener("DOMContentLoaded", function() {
 				const formLebel = formParent.querySelector('.formLebel');
 				const formPreview = formParent.querySelector('.formPreview');
 
-				
 				let formImageNumber = 'formImage--' + img++;
 				let formPreviewNumber = 'formPreview--' + prev++;
 				
@@ -256,13 +253,33 @@ document.addEventListener("DOMContentLoaded", function() {
 				}
 			
 				function formAddError(input) {
+					let div = document.createElement('div');
+					div.classList.add("form__error");
+					div.innerHTML = "Введите данные в поле";
+
+					input.parentElement.append(div);
 					input.parentElement.classList.add('_error');
 					input.classList.add('_error');
 				}
 			
-				function formRemoveError(input) {
-					input.parentElement.classList.remove('_error');
-					input.classList.remove('_error');
+				function formAddErrorEmail(input) {
+					let div = document.createElement('div');
+					div.classList.add("form__error");
+					div.innerHTML = "Введите свою почту";
+
+					input.parentElement.append(div);
+					input.parentElement.classList.add('_error');
+					input.classList.add('_error');
+				}
+			
+				function formAddErrorCheck(input) {
+					let div = document.createElement('div');
+					div.classList.add("form__error");
+					div.innerHTML = "Согласие на обработку персональных данных";
+
+					input.parentElement.append(div);
+					input.parentElement.classList.add('_error');
+					input.classList.add('_error');
 				}
 			
 				function emailTest(input) {

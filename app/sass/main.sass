@@ -267,6 +267,7 @@
 			visibility: visible
 
 	&__item
+		position: relative
 		margin-bottom: 15px
 
 	&__label
@@ -296,6 +297,10 @@
 		resize: none
 		min-height: 120px
 		padding: 15px
+
+		&._error
+			box-shadow: 0 0 4px 0 rgba(red, 1)
+			border-color: red
 
 	&__options
 
@@ -446,7 +451,30 @@
 				top: 3px
 				box-shadow: 0 0 5px 0 rgba($dark, .2)
 
+	&__error
+		position: absolute
+		bottom: -15px
+		right: 25px
+		left: 25px
+		transition: all .3s
+		animation: error .3s linear 1 forwards
+		color: #fff
+		text-align: center
+		font-weight: 600
+		background-color: red
+		border-radius: 10px
+		z-index: 1
 
+		&::before
+			content: ''
+			position: absolute
+			left: 50%
+			top: -8px
+			margin-left: -2px
+			border-bottom: 4px solid red
+			border-left: 4px solid transparent
+			border-right: 4px solid transparent
+			border-top: 4px solid transparent
 
 
 
