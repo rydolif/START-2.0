@@ -110,24 +110,24 @@ document.addEventListener("DOMContentLoaded", function() {
 					const wrap = item.id;
 					const link = document.querySelector('.' + wrap);
 					let close = item.querySelector('.close');
+					if (link) {
+						link.addEventListener('click', (e) => {
+							if (e.target) {
+								e.preventDefault();
+							}
+							item.classList.add('active');
+						});
+					}
 
-					link.addEventListener('click', (e) => {
-						if (e.target) {
-							e.preventDefault();
-						}
-						item.style.display = 'flex';
-						document.body.classList.add('modal--open')
-					});
-
-					close.addEventListener('click', () => {
-						item.style.display = 'none';
-						document.body.classList.remove('modal--open');
-					});
+					if (close) {
+						close.addEventListener('click', () => {
+							item.classList.remove('active');
+						});
+					}
 
 					item.addEventListener('click', (e) => {
 						if (e.target === item) {
-							item.style.display = 'none';
-							document.body.classList.remove('modal--open');
+							item.classList.remove('active');
 						}
 					});
 				});
@@ -159,7 +159,6 @@ document.addEventListener("DOMContentLoaded", function() {
 					let error = formValidate(item);
 			
 					let formData = new FormData(item);
-					formData.append('image', formImageAdd.files[0]);
 
 					if (error === 0) {
 						item.classList.add('_sending');
@@ -169,12 +168,10 @@ document.addEventListener("DOMContentLoaded", function() {
 						});
 			
 						if (response.ok) {
-							let modalThanks = document.querySelector('#modal--thanks');
+							let modalThanks = document.querySelector('#modal__thanks');
 							formParent.parentNode.style.display = 'none';
 
-							modalThanks.style.display = 'flex';
-							document.body.classList.add('modal--open');
-							formPreview.innerHTML = '';
+							modalThanks.classList.add('active');
 							item.reset();
 							item.classList.remove('_sending');
 						} else {
@@ -210,48 +207,63 @@ document.addEventListener("DOMContentLoaded", function() {
 					}
 					return error;
 				}
-			
-				//картинка в форме
-				const formImage = formParent.querySelector('.formImage');
-				const formLebel = formParent.querySelector('.formLebel');
-				const formPreview = formParent.querySelector('.formPreview');
 
-				let formImageNumber = 'formImage--' + img++;
-				let formPreviewNumber = 'formPreview--' + prev++;
+				const formImgFile = formParent.querySelectorAll('.formImgFile');
+
+				formImgFile.forEach(item => { 
+					const elem = 'formImgFile--' + i++;
+
+					let formId = item.id = (elem);
+					let formParent = document.querySelector('#' + formId);
+
+					const formImage = formParent.querySelector('.formImage');
+					const formLebel = formParent.querySelector('.formLebel');
+					const formPreview = formParent.querySelector('.formPreview');
+
+					//картинка в форме
+					let formImageNumber = 'formImage--' + img++;
+					let formPreviewNumber = 'formPreview--' + prev++;
+					
+					formImage.id = (formImageNumber);
+					formLebel.htmlFor = ('formImage--' + lebel++);
+					formPreview.id = (formPreviewNumber);
+					console.log(formPreview);
+					const formImageAdd = document.querySelector('#' + formImageNumber);
+
+					// изменения в инпуте файл
+					formImageAdd.addEventListener('change', () =>  {
+						uploadFile(formImage.files[0]);
+					});
+
+					function uploadFile(file) {
 				
-				formImage.id = (formImageNumber);
-				formLebel.htmlFor = ('formImage--' + lebel++);
-				formPreview.id = (formPreviewNumber);
-				const formImageAdd = document.querySelector('#' + formImageNumber);
+						if (!['image/jpeg', 'image/png', 'image/gif', 'image/ico', 'application/pdf'].includes(file.type)) {
+							alert('Только изображения');
+							formImage.value = '';
+							return;
+						}
+				
+						if (file.size > 2 * 1024 * 1024) {
+							alert('Размер менее 2 мб.');
+							return;
+						}
+				
+						var reader = new FileReader();
+						reader.onload = function (e) {
+							if(['application/pdf'].includes(file.type)) {
+								formPreview.innerHTML = `Файл выбран`;
+							}else{
+								formPreview.innerHTML = `<img src="${e.target.result}" alt="Фото">`;
+							}
+							
+						};
+						reader.onerror = function (e) {
+							alert('Ошибка');
+						};
+						reader.readAsDataURL(file);
+					}
+				})
 
-				// изменения в инпуте файл
-				formImageAdd.addEventListener('change', () =>  {
-					uploadFile(formImage.files[0]);
-				});
-			
-				function uploadFile(file) {
-			
-					if (!['image/jpeg', 'image/png', 'image/gif', 'image/ico'].includes(file.type)) {
-						alert('Только изображения');
-						formImage.value = '';
-						return;
-					}
-			
-					if (file.size > 2 * 1024 * 1024) {
-						alert('Размер менее 2 мб.');
-						return;
-					}
-			
-					var reader = new FileReader();
-					reader.onload = function (e) {
-						formPreview.innerHTML = `<img src="${e.target.result}" alt="Фото">`;
-					};
-					reader.onerror = function (e) {
-						alert('Ошибка');
-					};
-					reader.readAsDataURL(file);
-				}
-			
 				function formAddError(input) {
 					let div = document.createElement('div');
 					div.classList.add("form__error");
@@ -261,7 +273,7 @@ document.addEventListener("DOMContentLoaded", function() {
 					input.parentElement.classList.add('_error');
 					input.classList.add('_error');
 				}
-			
+
 				function formAddErrorEmail(input) {
 					let div = document.createElement('div');
 					div.classList.add("form__error");
@@ -271,7 +283,7 @@ document.addEventListener("DOMContentLoaded", function() {
 					input.parentElement.classList.add('_error');
 					input.classList.add('_error');
 				}
-			
+
 				function formAddErrorCheck(input) {
 					let div = document.createElement('div');
 					div.classList.add("form__error");
@@ -285,13 +297,41 @@ document.addEventListener("DOMContentLoaded", function() {
 				function emailTest(input) {
 					return !/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/. test(input.value);
 				}
-			
-				// function phoneTest(input) {
-				// 	return !/\+[0-9]{1}\s\([0-9]{3}\)\s[0-9]{3}-[0-9]{2}-[0-9]{2}/. test(input.value);
-				// }
+
 			});
 		};
 		forms('.form');
-	
-	});
+
+	//----------------------ADD-INPUT-----------------------
+		const adminAdd = (adminAddInput) => {
+			const inputAdd = document.querySelectorAll(adminAddInput);
+			let i = 1;
+
+			inputAdd.forEach(item => {
+				const elem = 'admin__add--' + i++;
+				item.classList.add(elem);
+
+				let inputId = item.id = (elem);
+				let inputParent = document.querySelector('#' + inputId);
+				let inputButton = inputParent.querySelector('button');
+
+				let inputDelete = inputParent.querySelector('.admin__nav_button a');
+
+				inputButton.addEventListener('click', (e) => {
+					e.preventDefault();
+					let parent = document.querySelector('#' + inputId);
+					let elem = inputParent.querySelector('.admin__add_elem');
+					let clone = elem.cloneNode(true);
+					parent.append(clone);
+				});
+
+				function myFunc(inputDelete){
+					inputDelete.parentElement.parentElement.remove();
+				}
+
+			});
+		};
+		adminAdd('.admin__add');
+
+});
 	

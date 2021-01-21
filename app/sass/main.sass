@@ -40,71 +40,78 @@
 
 // -----HAMBURGER-----
 .hamburger
-	display: none
-	position: absolute
-	right: 15px
-	top: 55%
+	position: relative
+	display: flex
 	padding: 0
-	transform: translate(0, -50%)
 	border: none
 	background-color: transparent
 	transition: all .3s
+	width: 25px
+	height: 18px
+	margin-right: 15px
+	outline: none
 
-	&:focus,
 	&:hover
-		outline: none
-		opacity: .7
+		span
+			background-color: $accent
 
-	&__box
-		position: relative
-		display: inline-block
-		width: 35px
-		perspective: 80px
+			&::before,
+			&::after
+				background-color: $accent
 
 	&__item
 		position: absolute
-		right: 0
-		top: 0
-		width: 35px
-		height: 3px
-		background-color: #fff
+		left: 0
+		top: 50%
+		transform: translate(0, -50%)
+		width: 12px
+		height: 2px
+		background-color: $text
 		border-radius: 4px
-		transition: all .2s
+		+transition
 		bottom: 0
 
-		&::before
-			content: ""
+		&::before,
+		&::after
+			content: ''
 			display: block
 			position: absolute
-			right: 0
-			top: -10px
-			background-color: #fff
-			width: 35px
-			height: 3px
-			transition: transform 0s 0.1s
+			left: 0
+			background-color: $text
+			height: 2px
+			+transition
+
+		&::before
+			top: 7px
+			width: 18px
 
 		&::after
-			content: ""
-			display: block
-			position: absolute
-			right: 0
-			top: -20px
-			background-color: #fff
-			width: 35px
-			height: 3px
-			transition: transform 0s 0.1s
-
+			top: -7px
+			width: 25px
 
 	&--active
-		z-index: 1001
+		z-index: 100
+
+		&:hover
+			span
+				background-color: transparent
+
+				&::before,
+				&::after
+					background-color: $accent
 
 		.hamburger__item
 			background-color: transparent
-			transform: rotateY(180deg)
+
 			&::before
-				transform: translate3d(0, 0px, 0) rotate(45deg)
+				top: 0
+				width: 25px
+				transform: rotate(45deg)
+
 			&::after
-				transform: translate3d(0, 10px, 0) rotate(-45deg)
+				top: 0
+				width: 25px
+				transform: rotate(-45deg)
 
 
 .header
@@ -135,7 +142,9 @@
 
 // -----MODAL-----
 .modal
-	display: none
+	display: flex
+	visibility: hidden
+	opacity: 0
 	position: fixed
 	top: 0
 	left: 0
@@ -148,45 +157,46 @@
 	background-color: rgba(#1a1a1d, .7)
 	overflow: auto
 	padding: 40px 0
+	+transition
 
-	&--open
-		position: relative
-		overflow: hidden
+	&.active
+		opacity: 1
+		visibility: visible
+
+		.modal__form
+			transform: translate(0, 0)
+			opacity: 1
 
 	&__close
 		position: absolute
-		right: -35px
-		top: -35px
+		right: 0
+		top: -40px
 		display: block
-		width: 40px
-		height: 40px
+		width: 30px
+		height: 30px
 		border-radius: 50%
 		border: none
 		cursor: pointer
 		transition: all .6s
-		background-color: #fff
+		background-color: transparent
 
 		+r(576)
 			width: 30px
 			height: 30px
-			top: -15px
-			right: -15px
-			box-shadow: 0 0 15px 0 rgba(#000, .7)
 
-		&:hover,
-		&:focus
+		&:hover
 			outline: none
 			transform: rotate(90deg)
 
 			span
-				background: red
+				background: $accent
 
 		span
 			display: block
 			position: absolute
 			left: 50%
 			top: 50%
-			background: #273a72
+			background: #fff
 			transition: all .6s
 			border-radius: 4px
 			height: 22px
@@ -202,13 +212,14 @@
 		z-index: 1
 		background-color: #fff
 		box-shadow: 0 0 16px rgba(0, 0, 0, 0.29)
-		border-radius: 20px
 		width: 100%
-		max-width: 860px
+		max-width: 500px
 		height: auto
-		padding: 20px
+		padding: 50px
 		border: 1px solid #8d8d8e
 		margin: auto
+		transform: translate(0, -150px)
+		+transition
 
 		&::after
 			border-radius: 20px
@@ -216,30 +227,16 @@
 		+r(992)
 			max-width: 90vw
 			padding: 40px
+		
+		+r(576)
+			padding: 25px
 
 	h3
+		text-transform: none
+		font-size: 1.3em
 		margin-bottom: 20px
-
-	&__line
-		margin-bottom: 20px
-
-	&__thanks
-		position: relative
-		display: flex
-		flex-direction: column
-		justify-content: center
-		align-items: center
-		flex-wrap: wrap
-		min-height: 200px
-		max-width: 480px
-
-		h3
-			text-transform: uppercase
-			font-size: 20px
-			margin-bottom: 20px
-		
-		p
-			font-size: 16px
+		text-align: center
+		font-weight: 600
 
 
 .form
@@ -423,6 +420,7 @@
 				transform: scale(1)
 
 	&__btn
+		order: 1
 
 		&_button
 			width: 100%
@@ -476,6 +474,33 @@
 			border-right: 4px solid transparent
 			border-top: 4px solid transparent
 
+	&__nav
 
+		&_wrap
+			display: flex
+			flex-direction: column
+			margin-bottom: 20px
+
+		&_item
+			display: flex
+			margin-bottom: 10px
+
+		&_button
+			display: flex
+			flex-shrink: 0
+
+			a
+				display: flex
+				justify-content: center
+				align-items: center
+				width: 40px
+				height: 40px
+				border-radius: 50%
+				box-shadow: 0 0 5px 0 rgba(#000, .3)
+				padding: 0
+				margin-left: 10px
+
+			img
+				max-width: 50%
 
 
