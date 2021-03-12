@@ -27,10 +27,12 @@
 	align-items: center
 	height: 45px
 	font-size: 18px
-	color: $accent
+	color: #fff
 	font-weight: 700
 	border-radius: 20px
 	max-width: fit-content
+	border: 1px solid $dark
+	background-color: $dark
 
 	&:hover,
 	&:focus
@@ -135,7 +137,7 @@
 
 
 .section
-	padding: 40px 0
+	padding: 150px 0
 
 
 .footer
@@ -426,31 +428,7 @@
 		order: 1
 
 		&_button
-			width: 100%
-			display: flex
-			justify-content: center
-			align-items: center
-			min-height: 60px
-			background-color: $dark
-			color: #ffffff
-			font-size: 16px
-			font-weight: 700
-			cursor: pointer
-			border-radius: 20px
-			display: block
-			box-shadow: 0 0 5px 0 rgba($dark, .3)
-			border: 0
-			position: relative
-			top: 0
-			+transition
-
-			&:hover
-				background-color: $accent
-
-			&:active
-				background-color: $accent
-				top: 3px
-				box-shadow: 0 0 5px 0 rgba($dark, .2)
+			@extend .btn
 
 	&__error
 		position: absolute

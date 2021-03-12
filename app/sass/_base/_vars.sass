@@ -8,7 +8,6 @@ $accent: #4cddee
 $text: #353535
 $dark: #1e53a6
 $title: #f43ddb
-
 //---------------------end-color---------------------
 
 body
@@ -83,29 +82,3 @@ input, textarea, select
 
 	&::placeholder
 		color: $text
-
-
-label.error
-	position: absolute
-	bottom: -25px
-	right: 25px
-	left: 25px
-	transition: all .3s
-	animation: error .3s linear 1 forwards
-	color: #fff
-	text-align: center
-	font-weight: 600
-	background-color: red
-	border-radius: 10px
-	z-index: 1
-
-	&::before
-		content: ''
-		position: absolute
-		left: 50%
-		top: -8px
-		margin-left: -2px
-		border-bottom: 4px solid red
-		border-left: 4px solid transparent
-		border-right: 4px solid transparent
-		border-top: 4px solid transparent
