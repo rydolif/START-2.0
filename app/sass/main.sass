@@ -26,17 +26,22 @@
 	justify-content: center
 	align-items: center
 	height: 45px
-	font-size: 18px
-	color: #fff
-	font-weight: 700
 	border-radius: 20px
 	max-width: fit-content
 	border: 1px solid $dark
 	background-color: $dark
+	padding: 0 15px
+	font-size: 16px
+	color: #fff
+	font-weight: 600
 
-	&:hover,
-	&:focus
+	&:hover
 		border: 1px solid $accent
+		background: $accent
+		color: #fff
+
+	&:active
+		border: 1px solid #fff
 		background: $accent
 		color: #fff
 
@@ -138,6 +143,11 @@
 
 .section
 	padding: 150px 0
+
+	&__container
+		display: flex
+		flex-wrap: wrap
+		gap: 15px
 
 
 .footer
