@@ -1,126 +1,144 @@
-// VARIABLES & PATHS
+let preprocessor = 'sass', // Preprocessor (sass, less, styl); 'sass' also work with the Scss syntax in blocks/ folder.
+		fileswatch   = 'html,htm,txt,json,md,woff2' // List of files extensions for watching & hard reload
 
-let preprocessor = 'sass', // Preprocessor (sass, scss, less, styl)
-    fileswatch   = 'html,htm,txt,json,md,woff2', // List of files extensions for watching & hard reload (comma separated)
-    imageswatch  = 'jpg,jpeg,png,webp,svg', // List of images extensions for watching & compression (comma separated)
-    baseDir      = 'app', // Base directory path without «/» at the end
-    online       = true; // If «false» - Browsersync will work offline without internet connection
+import pkg from 'gulp'
+const { gulp, src, dest, parallel, series, watch } = pkg
 
-let paths = {
-
-	scripts: {
-		src: [
-			// 'node_modules/jquery/dist/jquery.min.js', // npm vendor example (npm i --save-dev jquery)
-			// 'app/libs/jquery.fancybox.min.js', // swiper sider
-			'node_modules/swiper/swiper-bundle.js', // swiper sider
-			baseDir + '/js/app.js' // app.js. Always at the end
-		],
-		dest: baseDir + '/js',
-	},
-
-	styles: {
-		src:  baseDir + '/' + preprocessor + '/main.*',
-		dest: baseDir + '/css',
-	},
-
-	images: {
-		src:  baseDir + '/img/src/**/*',
-		dest: baseDir + '/img/dest',
-	},
-
-	deploy: {
-		hostname:    'username@yousite.com', // Deploy hostname
-		destination: 'yousite/public_html/', // Deploy destination
-		include:     [/* '*.htaccess' */], // Included files to deploy
-		exclude:     [ '**/Thumbs.db', '**/*.DS_Store' ], // Excluded files from deploy
-	},
-
-	cssOutputName: 'app.min.css',
-	jsOutputName:  'app.min.js',
-
-}
-
-// LOGIC
-
-const { src, dest, parallel, series, watch } = require('gulp');
-const sass         = require('gulp-sass');
-const scss         = require('gulp-sass');
-const less         = require('gulp-less');
-const styl         = require('gulp-stylus');
-const cleancss     = require('gulp-clean-css');
-const concat       = require('gulp-concat');
-const browserSync  = require('browser-sync').create();
-const uglify       = require('gulp-uglify-es').default;
-const autoprefixer = require('gulp-autoprefixer');
-const imagemin     = require('gulp-imagemin');
-const newer        = require('gulp-newer');
-const rsync        = require('gulp-rsync');
-const del          = require('del');
+import browserSync   from 'browser-sync'
+import bssi          from 'browsersync-ssi'
+import ssi           from 'ssi'
+import webpackStream from 'webpack-stream'
+import webpack       from 'webpack'
+import TerserPlugin  from 'terser-webpack-plugin'
+import gulpSass      from 'gulp-sass'
+import dartSass      from 'sass'
+import sassglob      from 'gulp-sass-glob'
+const  sass          = gulpSass(dartSass)
+import less          from 'gulp-less'
+import lessglob      from 'gulp-less-glob'
+import styl          from 'gulp-stylus'
+import stylglob      from 'gulp-noop'
+import postCss       from 'gulp-postcss'
+import cssnano       from 'cssnano'
+import autoprefixer  from 'autoprefixer'
+import imagemin      from 'gulp-imagemin'
+import changed       from 'gulp-changed'
+import concat        from 'gulp-concat'
+import rsync         from 'gulp-rsync'
+import {deleteAsync} from 'del'
 
 function browsersync() {
 	browserSync.init({
-		server: { baseDir: baseDir + '/' },
+		server: {
+			baseDir: 'app/',
+			middleware: bssi({ baseDir: 'app/', ext: '.html' })
+		},
+		ghostMode: { clicks: false },
 		notify: false,
-		online: online
+		online: true,
+		// tunnel: 'yousutename', // Attempt to use the URL https://yousutename.loca.lt
 	})
 }
 
 function scripts() {
-	return src(paths.scripts.src)
-	.pipe(concat(paths.jsOutputName))
-	.pipe(uglify())
-	.pipe(dest(paths.scripts.dest))
-	.pipe(browserSync.stream())
+	return src(['app/js/*.js', '!app/js/*.min.js'])
+		.pipe(webpackStream({
+			mode: 'production',
+			performance: { hints: false },
+			plugins: [
+				new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery', 'window.jQuery': 'jquery' }), // jQuery (npm i jquery)
+			],
+			module: {
+				rules: [
+					{
+						test: /\.m?js$/,
+						exclude: /(node_modules)/,
+						use: {
+							loader: 'babel-loader',
+							options: {
+								presets: ['@babel/preset-env'],
+								plugins: ['babel-plugin-root-import']
+							}
+						}
+					}
+				]
+			},
+		}, webpack)).on('error', (err) => {
+			this.emit('end')
+		})
+		.pipe(concat('app.min.js'))
+		.pipe(dest('app/js'))
+		.pipe(browserSync.stream())
 }
 
 function styles() {
-	return src(paths.styles.src)
-	.pipe(eval(preprocessor)())
-	.pipe(concat(paths.cssOutputName))
-	.pipe(autoprefixer({ overrideBrowserslist: ['last 10 versions'], grid: true }))
-	.pipe(cleancss( {level: { 1: { specialComments: 0 } },/* format: 'beautify' */ }))
-	.pipe(dest(paths.styles.dest))
-	.pipe(browserSync.stream())
+	return src([`app/${preprocessor}/*.*`, `!app/${preprocessor}/_*.*`])
+		.pipe(eval(`${preprocessor}glob`)())
+		.pipe(eval(preprocessor)({ 'include css': true }))
+		.pipe(postCss([
+			autoprefixer({ grid: 'autoplace' }),
+			cssnano({ preset: ['default', { discardComments: { removeAll: true } }] })
+		]))
+		.pipe(concat('app.min.css'))
+		.pipe(dest('app/css'))
+		.pipe(browserSync.stream())
 }
 
 function images() {
-	return src(paths.images.src)
-	.pipe(newer(paths.images.dest))
-	.pipe(imagemin())
-	.pipe(dest(paths.images.dest))
+	return src(['app/images/src/**/*'])
+		.pipe(changed('app/images/dist'))
+		.pipe(imagemin())
+		.pipe(dest('app/images/dist'))
+		.pipe(browserSync.stream())
 }
 
-function cleanimg() {
-	return del('' + paths.images.dest + '/**/*', { force: true })
+function buildcopy() {
+	return src([
+		'{app/js,app/css}/*.min.*',
+		'app/images/**/*.*',
+		'!app/images/src/**/*',
+		'app/fonts/**/*',
+		'app/phpmailer/**/*',
+		'app/sendmail.php'
+	], { base: 'app/' })
+	.pipe(dest('dist'))
+}
+
+async function buildhtml() {
+	let includes = new ssi('app/', 'dist/', '/**/*.html')
+	includes.compile()
+	await deleteAsync('dist/parts', { force: true })
+}
+
+async function cleandist() {
+	await deleteAsync('dist/**/*', { force: true })
 }
 
 function deploy() {
-	return src(baseDir + '/')
-	.pipe(rsync({
-		root: baseDir + '/',
-		hostname: paths.deploy.hostname,
-		destination: paths.deploy.destination,
-		include: paths.deploy.include,
-		exclude: paths.deploy.exclude,
-		recursive: true,
-		archive: true,
-		silent: false,
-		compress: true
-	}))
+	return src('dist/')
+		.pipe(rsync({
+			root: 'dist/',
+			hostname: 'username@yousite.com',
+			destination: 'yousite/public_html/',
+			// clean: true, // Mirror copy with file deletion
+			include: [/* '*.htaccess' */], // Included files to deploy,
+			exclude: [ '**/Thumbs.db', '**/*.DS_Store' ],
+			recursive: true,
+			archive: true,
+			silent: false,
+			compress: true
+		}))
 }
 
 function startwatch() {
-	watch(baseDir  + '/' + preprocessor + '/**/*', {usePolling: true}, styles);
-	watch(baseDir  + '/img/src/**/*.{' + imageswatch + '}', {usePolling: true}, images);
-	watch(baseDir  + '/**/*.{' + fileswatch + '}', {usePolling: true}).on('change', browserSync.reload);
-	watch([baseDir + '/js/**/*.js', '!' + paths.scripts.dest + '/*.min.js'], {usePolling: true}, scripts);
+	watch(`app/${preprocessor}/**/*`, { usePolling: true }, styles)
+	watch(['app/js/**/*.js', '!app/js/**/*.min.js'], { usePolling: true }, scripts)
+	watch('app/images/src/**/*', { usePolling: true }, images)
+	watch(`app/**/*.{${fileswatch}}`, { usePolling: true }).on('change', browserSync.reload)
 }
 
-exports.browsersync = browsersync;
-exports.assets      = series(cleanimg, styles, scripts, images);
-exports.styles      = styles;
-exports.scripts     = scripts;
-exports.images      = images;
-exports.cleanimg    = cleanimg;
-exports.deploy      = deploy;
-exports.default     = parallel(images, styles, scripts, browsersync, startwatch);
+export { scripts, styles, images, deploy }
+export let assets = series(scripts, styles, images)
+export let build = series(cleandist, images, scripts, styles, buildcopy, buildhtml)
+
+export default series(scripts, styles, images, parallel(browsersync, startwatch))

@@ -1,5 +1,3 @@
-'use strict';
-
 document.addEventListener("DOMContentLoaded", function() {
 
 	//----------------------SLIDER-hero----------------------
@@ -46,11 +44,16 @@ document.addEventListener("DOMContentLoaded", function() {
 						const topOffset = 70;
 						const elementPosition = scrollTarget.getBoundingClientRect().top;
 						const offsetPosition = elementPosition - topOffset;
+
+						console.log(offsetPosition)
+						console.log(window.innerHeight)
 	
 						window.scrollBy({
 								top: offsetPosition,
 								behavior: 'smooth'
 						});
+
+						// window.scrollBy(0, window.innerHeight);
 	
 						
 						let button = document.querySelector('.hamburger'),
@@ -63,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				});
 			});
 		};
-		// scrollTo('.header__nav');
+		scrollTo('.header__nav');
 	
 	//----------------------FIXED-HEADER-----------------------
 		const headerFixed = (headerFixed, headerActive) => {
@@ -82,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			});
 	
 		};
-		// headerFixed('.header', '.header--active');
+		headerFixed('.header', '.header--active');
 	
 	//----------------------HAMBURGER-----------------------
 		const hamburger = (hamburgerButton, hamburgerNav, hamburgerHeader) => {
@@ -97,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			});
 	
 		};
-		// hamburger('.hamburger', '.header__nav', '.header');
+		hamburger('.hamburger', '.header__nav', '.header');
 		
 	//----------------------MODAL-----------------------
 		const modals = (modalSelector) => {
